@@ -1,0 +1,23 @@
+{
+  "name": "thunderlane",
+  "version": "1.0.0",
+  "description": "Thunderlane",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AurorahHarmony/Thunderlane.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AurorahHarmony/Thunderlane/issues"
+  },
+  "homepage": "https://github.com/AurorahHarmony/Thunderlane#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0"
+  }
+}
