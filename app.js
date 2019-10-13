@@ -26,6 +26,9 @@ client.on('guildCreate', guild => {
 client.on('message', message => {
 	console.log(`${message.guild.id} | ${message.member.user.tag} - ${message.content}`);
 
+	if (message.content === '!invite') {
+		message.channel.send('https://discordapp.com/oauth2/authorize?&client_id=632869587683115019&scope=bot&permissions=8');
+	}
 	if (message.content === 'ping') {
 		message.channel.send('pong');
 	}
