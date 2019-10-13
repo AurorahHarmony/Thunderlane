@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Database Schema
-const serverSchema = new mongoose.Schema({
-	serverID: String
+const guildSchema = new mongoose.Schema({
+	guildID: String
 });
 
 client.on('ready', () => {
