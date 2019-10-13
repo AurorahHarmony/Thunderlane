@@ -16,6 +16,12 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
+//Run code on join guild
+client.on('guildCreate', guild => {
+	console.log(`Joined a new guild: ${guild.name} (${guild.id})`);
+	//Your other stuff like adding to guildArray
+});
+
 //Listener for messages
 client.on('message', message => {
 	console.log(`${message.guild.id} | ${message.member.user.tag} - ${message.content}`);
