@@ -29,17 +29,19 @@ db.on('disconnected', function() {
 	});
 });
 
-const findOrCreate = require('mongoose-findorcreate');
+// const findOrCreate = require('mongoose-findorcreate');
 
 //Database Schema
-const guildSchema = new mongoose.Schema({
-	guildID: { type: String, required: true },
-	prefix: String
-});
+// const guildSchema = new mongoose.Schema({
+// 	guildID: { type: String, required: true },
+// 	prefix: String
+// });
 
-guildSchema.plugin(findOrCreate);
+// // guildSchema.plugin(findOrCreate);
 
-const Guild = mongoose.model('Guild', guildSchema);
+// const Guild = mongoose.model('Guild', guildSchema);
+
+const Guild = require('./models/guild');
 
 const { Client, RichEmbed, Collection } = require('discord.js');
 const client = new Client({
@@ -70,8 +72,6 @@ client.on('message', async message => {
 
 	const foundGuild = await Guild.findOne({ guildID: message.guild.id });
 
-	console.log(foundGuild.prefix);
-
 	const prefix = '++';
 	const guildPrefix = foundGuild.prefix;
 
@@ -80,10 +80,19 @@ client.on('message', async message => {
 	if (!message.content.startsWith(prefix) && !message.content.startsWith(guildPrefix)) return;
 	if (!message.member) message.member = await message.guild.fetchMember(message);
 
-	const args = message.content
-		.slice(prefix.length)
-		.trim()
-		.split(/ +/g);
+	let args;
+	if (message.content.startsWith(prefix)) {
+		args = message.content
+			.slice(prefix.length)
+			.trim()
+			.split(/ +/g);
+	} else if (message.content.startsWith(guildPrefix)) {
+		args = message.content
+			.slice(guildPrefix.length)
+			.trim()
+			.split(/ +/g);
+	}
+
 	const cmd = args.shift().toLowerCase();
 
 	if (cmd.length === 0) return;
@@ -91,7 +100,7 @@ client.on('message', async message => {
 	let command = client.commands.get(cmd);
 	if (!command) command = client.commands.get(client.aliases.get(cmd));
 
-	if (command) command.run(client, message, args);
+	if (command) command.run(client, message, args, foundGuild);
 });
 
 client.login(process.env.TOKEN);
