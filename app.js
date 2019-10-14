@@ -67,6 +67,17 @@ client.on('ready', () => {
 	});
 });
 
+client.on('guildCreate', guild => {
+	//Check if guild already has database
+	Guild.findOrCreate({ guildID: guild.id }, function(err, Guild, created) {
+		if (created) {
+			console.log(`Joined new guild: ${guild.name} (${guild.id})`);
+		} else {
+			console.log(`Rejoined guild: ${guild.name} (${guild.id})`);
+		}
+	});
+});
+
 client.on('message', async message => {
 	console.log(`${message.author.tag} said: ${message.content}`);
 
