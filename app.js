@@ -68,18 +68,16 @@ client.on('ready', () => {
 client.on('message', async message => {
 	console.log(`${message.author.tag} said: ${message.content}`);
 
-	Guild.findOne({ guildID: message.guild.id }, (err, guild) => {
-		console.log(guild.prefix);
-		if (err) {
-			console.log(err);
-		}
-	});
+	const foundGuild = await Guild.findOne({ guildID: message.guild.id });
+
+	console.log(foundGuild.prefix);
 
 	const prefix = '++';
+	const guildPrefix = foundGuild.prefix;
 
 	if (message.author.bot) return;
 	if (!message.guild) return;
-	if (!message.content.startsWith(prefix)) return;
+	if (!message.content.startsWith(prefix) && !message.content.startsWith(guildPrefix)) return;
 	if (!message.member) message.member = await message.guild.fetchMember(message);
 
 	const args = message.content
