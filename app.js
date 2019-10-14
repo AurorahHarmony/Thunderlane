@@ -1,5 +1,46 @@
 require('dotenv').config();
 
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true }).catch(err => {
+	console.log('Error in MongoDb connection: ' + err);
+});
+
+let db = mongoose.connection;
+
+db.on('connecting', function() {
+	console.log('connecting to MongoDB...');
+});
+
+db.on('connected', function() {
+	console.log('MongoDB connected!');
+});
+db.once('open', function() {
+	console.log('MongoDB connection opened!');
+});
+db.on('reconnected', function() {
+	console.log('MongoDB reconnected!');
+});
+
+db.on('disconnected', function() {
+	console.log('MongoDB disconnected!');
+	mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true }).catch(err => {
+		console.log('Error in MongoDb connection: ' + err);
+	});
+});
+
+const findOrCreate = require('mongoose-findorcreate');
+
+//Database Schema
+const guildSchema = new mongoose.Schema({
+	guildID: { type: String, required: true },
+	prefix: String
+});
+
+guildSchema.plugin(findOrCreate);
+
+const Guild = mongoose.model('Guild', guildSchema);
+
 const { Client, RichEmbed, Collection } = require('discord.js');
 const client = new Client({
 	disableEveryone: true
@@ -26,6 +67,13 @@ client.on('ready', () => {
 
 client.on('message', async message => {
 	console.log(`${message.author.tag} said: ${message.content}`);
+
+	Guild.findOne({ guildID: message.guild.id }, (err, guild) => {
+		console.log(guild.prefix);
+		if (err) {
+			console.log(err);
+		}
+	});
 
 	const prefix = '++';
 
