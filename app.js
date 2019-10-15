@@ -29,18 +29,6 @@ db.on('disconnected', function() {
 	});
 });
 
-// const findOrCreate = require('mongoose-findorcreate');
-
-//Database Schema
-// const guildSchema = new mongoose.Schema({
-// 	guildID: { type: String, required: true },
-// 	prefix: String
-// });
-
-// // guildSchema.plugin(findOrCreate);
-
-// const Guild = mongoose.model('Guild', guildSchema);
-
 const Guild = require('./models/guild');
 
 const { Client, RichEmbed, Collection } = require('discord.js');
