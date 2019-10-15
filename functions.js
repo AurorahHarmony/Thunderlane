@@ -21,8 +21,6 @@ module.exports = {
 		return new Intl.DateTimeFormat('en-US').format(date);
 	},
 
-	cleanId: function(id) {},
-
 	getChannel: function(message, toFind = '') {
 		toFind = toFind.toLowerCase();
 
