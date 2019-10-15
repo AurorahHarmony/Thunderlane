@@ -1,7 +1,7 @@
 {
 	"color": {
 		"info": "b7ddde",
-		"danger": "dc3545",
+		"error": "dc3545",
 		"warning": "ffc107",
 		"success": "28a745"
 	},
