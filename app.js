@@ -38,15 +38,8 @@ const client = new Client({
 
 client.commands = new Collection();
 client.aliases = new Collection();
-client.config = {
-	color: {
-		info: 'b7ddde',
-		danger: 'dc3545',
-		warning: 'ffc107',
-		success: '28a745'
-	},
-	liveTime: 5000
-};
+client.config = require('./config.json');
+
 ['command'].forEach(handler => {
 	require(`./handler/${handler}`)(client);
 });
