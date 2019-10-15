@@ -1,10 +1,19 @@
+const { RichEmbed } = require('discord.js');
+
 module.exports = {
 	name: 'ping',
 	category: 'info',
 	description: 'returns latency and API ping',
 	run: async (client, message, args) => {
-		const msg = await message.channel.send('Pinging...');
+		let embed = new RichEmbed()
+			.setTitle('Ping')
+			.setColor(client.config.color.info)
+			.setDescription('Pinging...');
 
-		msg.edit(`Latency is ${Math.floor(msg.createdAt - message.createdAt)}ms\nAPI Latency is ${Math.round(client.ping)}ms`);
+		const msg = await message.channel.send(embed);
+
+		embed.description = `Latency is ${Math.floor(msg.createdAt - message.createdAt)}ms\nAPI Latency is ${Math.round(client.ping)}ms`;
+
+		msg.edit(embed);
 	}
 };
