@@ -19,5 +19,23 @@ module.exports = {
 
 	formatDate: function(date) {
 		return new Intl.DateTimeFormat('en-US').format(date);
+	},
+
+	cleanId: function(id) {},
+
+	getChannel: function(message, toFind = '') {
+		toFind = toFind.toLowerCase();
+
+		let target = message.guild.channels.get(toFind);
+
+		if (!target && typeof message.mentions.channels.first() !== 'undefined') target = message.mentions.channels.first().id;
+
+		if (!target && toFind) {
+			target = message.client.channels.find(channel => channel.name === toFind).id;
+		}
+
+		if (!target) target = message.channel.id;
+
+		return target;
 	}
 };
