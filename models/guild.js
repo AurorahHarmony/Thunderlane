@@ -3,6 +3,7 @@ const findOrCreate = require('mongoose-findorcreate');
 
 const guildSchema = new mongoose.Schema({
 	guildID: { type: String, required: true },
+	guildName: String,
 	prefix: String
 });
 

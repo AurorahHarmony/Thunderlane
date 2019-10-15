@@ -69,13 +69,22 @@ client.on('ready', () => {
 
 client.on('guildCreate', guild => {
 	//Check if guild already has database
-	Guild.findOrCreate({ guildID: guild.id }, function(err, Guild, created) {
+	Guild.findOrCreate({ guildID: guild.id }, { guildName: guild.name }, function(err, Guild, created) {
 		if (created) {
 			console.log(`Joined new guild: ${guild.name} (${guild.id})`);
 		} else {
 			console.log(`Rejoined guild: ${guild.name} (${guild.id})`);
 		}
 	});
+});
+
+client.on('guildUpdate', async (oldGuild, newGuild) => {
+	await Guild.updateOne(
+		{ guildID: oldGuild.id },
+		{
+			guildName: newGuild.name
+		}
+	);
 });
 
 client.on('message', async message => {
