@@ -9,6 +9,6 @@ module.exports = {
 
 		if (args.length < 1) return message.reply('Your say command does not have any content').then(m => m.delete(5000));
 
-		message.channel.send(args.join(''));
+		message.channel.send(args.join(' '));
 	}
 };
