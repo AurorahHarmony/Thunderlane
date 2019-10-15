@@ -28,13 +28,6 @@ module.exports = {
 
 		if (!target && typeof message.mentions.channels.first() !== 'undefined') target = message.mentions.channels.first().id;
 
-		if (!target && toFind) {
-			target = message.client.channels.find(channel => channel.name === toFind);
-			if (target !== null) {
-				return target.id;
-			}
-		}
-
 		if (!target) target = message.channel.id;
 
 		return target;
