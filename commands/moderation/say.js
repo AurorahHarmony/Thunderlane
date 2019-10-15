@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'say',
-	aliases: ['broadcast'],
+	aliases: ['broadcast', 'bc'],
 	category: 'moderation',
 	description: 'says your input via the bot',
 	usage: '<input>',

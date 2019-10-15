@@ -1,8 +1,8 @@
 const { RichEmbed } = require('discord.js');
 
 module.exports = {
-	name: 'prefix',
-	aliases: ['setprefix'],
+	name: 'setprefix',
+	aliases: ['prefix'],
 	category: 'moderation',
 	description: 'allows you to change the server prefix',
 	usage: '<input>',
