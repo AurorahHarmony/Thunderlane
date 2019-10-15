@@ -10,7 +10,7 @@ module.exports = {
 		if (args.length === 0) {
 			const embed = new RichEmbed()
 				.setTitle('Prefix Manager')
-				.setColor('b7ddde')
+				.setColor(client.config.color.info)
 				.setDescription(`The server prefix is ${foundGuild.prefix}`);
 
 			message.channel.send(embed);
@@ -21,7 +21,7 @@ module.exports = {
 			return message.channel.send(
 				new RichEmbed()
 					.setTitle('Prefix Manager')
-					.setColor('b7ddde')
+					.setColor(client.config.color.warning)
 					.setDescription('You do not have permission to change the server prefix')
 			);
 
@@ -31,7 +31,7 @@ module.exports = {
 			message.channel.send(
 				new RichEmbed()
 					.setTitle('Prefix Manager')
-					.setColor('b7ddde')
+					.setColor(client.config.color.success)
 					.setDescription(`The prefix has been set to ${foundGuild.prefix}`)
 			)
 		);
