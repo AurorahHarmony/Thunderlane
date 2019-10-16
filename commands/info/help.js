@@ -55,8 +55,11 @@ function getCMD(client, message, input) {
 		);
 	}
 
-	if (cmd.name) title = `${cmd.name.charAt(0).toUpperCase() + cmd.name.substring(1)}`;
-	if (cmd.aliases) info = `\n**Aliases**: ${cmd.aliases.map(a => `\`${a}\``).join(', ')}`;
+	if (cmd.name) {
+		title = `${cmd.name.charAt(0).toUpperCase() + cmd.name.substring(1)}`;
+		info = '';
+	}
+	if (cmd.aliases) info += `\n**Aliases**: ${cmd.aliases.map(a => `\`${a}\``).join(', ')}`;
 	if (cmd.description) info += `\n**Description**: ${cmd.description}`;
 	if (cmd.usage) {
 		info += `\n**Usage**: ${cmd.usage}`;
