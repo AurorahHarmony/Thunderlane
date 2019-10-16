@@ -80,18 +80,21 @@ client.on('guildUpdate', async (oldGuild, newGuild) => {
 });
 
 client.on('message', async message => {
-	console.log(`${message.author.tag} said: ${message.content}`);
-
-	const foundGuild = await Guild.findOne({ guildID: message.guild.id });
-	client.foundGuild = foundGuild;
-
 	const prefix = '++';
-	const guildPrefix = foundGuild.prefix;
+	let foundGuild,
+		guildPrefix = prefix;
+
+	if (message.guild) {
+		foundGuild = await Guild.findOne({ guildID: message.guild.id });
+		guildPrefix = foundGuild.prefix;
+		client.foundGuild = foundGuild;
+	}
 
 	if (message.author.bot) return;
-	if (!message.guild) return;
+	console.log(`${message.author.tag} said: ${message.content}`);
+	// if (!message.guild) return;
 	if (!message.content.startsWith(prefix) && !message.content.startsWith(guildPrefix)) return;
-	if (!message.member) message.member = await message.guild.fetchMember(message);
+	if (!message.member && message.guild) message.member = await message.guild.fetchMember(message);
 
 	let args;
 	if (message.content.startsWith(prefix)) {
@@ -112,6 +115,10 @@ client.on('message', async message => {
 
 	let command = client.commands.get(cmd);
 	if (!command) command = client.commands.get(client.aliases.get(cmd));
+
+	if (!command.supportsDM && message.channel.type !== 'text') {
+		return message.reply("I can't execute that command inside DMs!");
+	}
 
 	if (command) command.run(client, message, args, foundGuild);
 });

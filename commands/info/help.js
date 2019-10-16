@@ -7,6 +7,7 @@ module.exports = {
 	category: 'info',
 	description: 'Returns all commands, or one specific command info',
 	usage: '[command | alias]',
+	supportsDM: true,
 	run: async (client, message, args) => {
 		if (args[0]) {
 			return getCMD(client, message, args[0]);
@@ -27,7 +28,12 @@ function getAll(client, message) {
 		embed.addField(e.charAt(0).toUpperCase() + e.slice(1), commands(e), true);
 	});
 
-	embed.setFooter(`The prefix for this server is ${client.foundGuild.prefix || '++'}`);
+	let serverPrefix = () => {
+		if (client.foundGuild) return client.foundGuild.prefix;
+		return '++';
+	};
+
+	embed.setFooter(`The prefix for this server is ${serverPrefix()}`);
 
 	return message.channel.send(embed);
 }

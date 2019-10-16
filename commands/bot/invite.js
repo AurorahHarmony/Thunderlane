@@ -4,6 +4,7 @@ module.exports = {
 	name: 'invite',
 	category: 'bot',
 	description: 'Returns a link to invite the bot to your server',
+	supportsDM: true,
 	run: async (client, message, args) => {
 		let embed = new RichEmbed()
 			.setTitle("Here's the link!")

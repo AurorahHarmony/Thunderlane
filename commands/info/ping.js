@@ -4,6 +4,7 @@ module.exports = {
 	name: 'ping',
 	category: 'info',
 	description: 'returns latency and API ping',
+	supportsDM: true,
 	run: async (client, message, args) => {
 		let embed = new RichEmbed()
 			.setTitle('Ping')
