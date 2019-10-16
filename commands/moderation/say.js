@@ -8,7 +8,7 @@ module.exports = {
 	description: 'says your input via the bot',
 	usage: '<input>',
 	run: async (client, message, args) => {
-		if (args.length < 1) return message.reply('Your say command does not have any content').then(m => m.delete(5000));
+		if (args.length < 1) return message.reply('Your say command does not have any content').then(m => m.delete(client.config.liveTime));
 
 		let channelId = getChannel(message, args[0]);
 
@@ -26,13 +26,5 @@ module.exports = {
 					.setDescription(`Your message \`${args.join(' ')}\` was sent in <#${channelId}>`)
 			);
 		}
-
-		// if (typeof message.mentions.channels.first() !== 'undefined') {
-		// 	message.mentions.channels.first().send(args.join(' '));
-		// 	message.channel.send('Message sent in ' + message.mentions.channels.first().name);
-		// } else {
-		// 	if (message.deletable) message.delete();
-		// 	message.channel.send(args.join(' '));
-		// }
 	}
 };
