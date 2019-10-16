@@ -3,7 +3,6 @@ const { getChannel } = require('../../functions');
 
 module.exports = {
 	name: 'logchannel',
-	aliases: ['l'],
 	category: 'moderation',
 	description: 'Allows setup of log channel',
 	run: async (client, message, args, foundGuild) => {
