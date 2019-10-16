@@ -83,6 +83,7 @@ client.on('message', async message => {
 	console.log(`${message.author.tag} said: ${message.content}`);
 
 	const foundGuild = await Guild.findOne({ guildID: message.guild.id });
+	client.foundGuild = foundGuild;
 
 	const prefix = '++';
 	const guildPrefix = foundGuild.prefix;
