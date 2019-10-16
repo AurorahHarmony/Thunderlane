@@ -64,7 +64,7 @@ module.exports = {
 		// Send the message
 		await message.channel.send(promptEmbed).then(async msg => {
 			// Await the reactions and the reactioncollector
-			const emoji = await promptMessage(msg, message.author, 30, ['✅', '❌']);
+			const emoji = await promptMessage(msg, message.author, 30, ['✅', '❌'], true);
 
 			// Verification stuffs
 			if (emoji === '✅') {
