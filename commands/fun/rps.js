@@ -6,13 +6,14 @@ const chooseArr = ['🗿', '📰', '✂'];
 module.exports = {
 	name: 'rps',
 	category: 'fun',
-	description: 'Rock Paper Scissors game. React to one of the emojis to play the game.',
+	description: 'Rock Paper Scissors game. React to one of the emojis to play.',
 	usage: 'rps',
 	run: async (client, message, args) => {
 		const embed = new RichEmbed()
 			.setColor(client.config.color.info)
-			.setFooter(message.guild.me.displayName, client.user.displayAvatarURL)
-			.setDescription('Add a reaction to one of these emojis to play the game!')
+			.setTitle('Rock Paper Scissors')
+			.setFooter(message.member.displayName, message.author.displayAvatarURL)
+			.setDescription('Pick wisely. You have 30s.')
 			.setTimestamp();
 
 		const m = await message.channel.send(embed);
@@ -27,17 +28,20 @@ module.exports = {
 		// Clear the reactions
 		await m.clearReactions();
 
-		embed.setDescription('').addField(result, `${reacted} vs ${botChoice}`);
+		embed
+			.setDescription('')
+			.setTitle('')
+			.addField(result, `${reacted || 'Nothing'} vs ${botChoice}`);
 
 		m.edit(embed);
 
 		function getResult(me, clientChosen) {
 			if ((me === '🗻' && clientChosen === '✂') || (me === '📰' && clientChosen === '🗻') || (me === '✂' && clientChosen === '📰')) {
-				return 'You won!';
+				return `${message.member.displayName} Won!`;
 			} else if (me === clientChosen) {
 				return "It's a tie!";
 			} else {
-				return 'You lost!';
+				return `${message.member.displayName} lost!`;
 			}
 		}
 	}
