@@ -59,8 +59,8 @@ module.exports = {
 
 		const promptEmbed = new RichEmbed()
 			.setColor(client.config.color.warning)
-			.setAuthor(`This verification becomes invalid after 30s.`)
-			.setDescription(`Do you want to kick ${toKick}?`);
+			.setAuthor(`This verification will automatically cancel in 30s`)
+			.setDescription(`Are you sure you want to **Kick**: ${toKick}?`);
 
 		// Send the message
 		await message.channel.send(promptEmbed).then(async msg => {
@@ -72,7 +72,7 @@ module.exports = {
 				msg.delete();
 
 				toKick.kick(args.slice(1).join(' ')).catch(err => {
-					if (err) return message.channel.send(`There was an error kicking the user: ${err}`);
+					if (err) return message.channel.send(`Kick Failed: ${err}`);
 				});
 
 				logChannel.send(embed);
