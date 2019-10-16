@@ -36,9 +36,12 @@ const client = new Client({
 	disableEveryone: true
 });
 
+const fs = require('fs');
+
 client.commands = new Collection();
 client.aliases = new Collection();
 client.config = require('./config.json');
+client.categories = fs.readdirSync('./commands/');
 
 ['command'].forEach(handler => {
 	require(`./handler/${handler}`)(client);
