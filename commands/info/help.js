@@ -29,8 +29,6 @@ function getAll(client, message) {
 	});
 
 	let serverPrefix = () => {
-		console.log(client.foundGuild);
-
 		if (client.foundGuild !== undefined) return client.foundGuild.prefix;
 		return '++';
 	};
