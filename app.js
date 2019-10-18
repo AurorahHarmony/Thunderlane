@@ -61,14 +61,14 @@ client.on('ready', () => {
 		{
 			status: 'online',
 			game: {
-				name: `0 servers`,
+				name: `Null servers`,
 				type: 'WATCHING'
 			}
 		},
 		{
 			status: 'online',
 			game: {
-				name: `0 users`,
+				name: `Null users`,
 				type: 'WATCHING'
 			}
 		}
@@ -85,7 +85,7 @@ client.on('ready', () => {
 			statusIndex = 0;
 		}
 
-		if (statusIndex === 1) status[1].game.name = `${Math.random()} servers`;
+		if (statusIndex === 1) status[1].game.name = `3 servers`;
 		client.user.setPresence(status[statusIndex]);
 	}, 5000);
 });
