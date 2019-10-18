@@ -6,7 +6,7 @@ const chooseArr = ['🗿', '📰', '✂'];
 module.exports = {
 	name: 'rps',
 	category: 'fun',
-	description: 'Rock Paper Scissors game. React to one of the emojis to play.',
+	description: 'Rock Paper Scissors game. React to one of the emojis to play the game.',
 	usage: 'rps',
 	run: async (client, message, args) => {
 		const embed = new RichEmbed()
@@ -28,20 +28,17 @@ module.exports = {
 		// Clear the reactions
 		await m.clearReactions();
 
-		embed
-			.setDescription('')
-			.setTitle('')
-			.addField(result, `${reacted || 'Nothing'} vs ${botChoice}`);
+		embed.setDescription('').addField(result, `${reacted || Nothing} vs ${botChoice}`);
 
 		m.edit(embed);
 
 		function getResult(me, clientChosen) {
-			if ((me === '🗻' && clientChosen === '✂') || (me === '📰' && clientChosen === '🗻') || (me === '✂' && clientChosen === '📰')) {
-				return `${message.member.displayName} Won!`;
+			if ((me === '🗿' && clientChosen === '✂') || (me === '📰' && clientChosen === '🗿') || (me === '✂' && clientChosen === '📰')) {
+				return 'You won!';
 			} else if (me === clientChosen) {
 				return "It's a tie!";
 			} else {
-				return `${message.member.displayName} lost!`;
+				return 'You lost!';
 			}
 		}
 	}
