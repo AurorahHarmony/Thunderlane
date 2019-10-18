@@ -50,13 +50,44 @@ client.categories = fs.readdirSync('./commands/');
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 
-	client.user.setPresence({
-		status: 'online',
-		game: {
-			name: '- ++help to see a list of commands',
-			type: 'WATCHING'
+	const status = [
+		{
+			status: 'online',
+			game: {
+				name: 'your commands. Type ++help',
+				type: 'LISTENING'
+			}
+		},
+		{
+			status: 'online',
+			game: {
+				name: `0 servers`,
+				type: 'WATCHING'
+			}
+		},
+		{
+			status: 'online',
+			game: {
+				name: `0 users`,
+				type: 'WATCHING'
+			}
 		}
-	});
+	];
+
+	client.user.setPresence(status[0]);
+
+	let statusIndex = 0;
+
+	setInterval(() => {
+		if (statusIndex < status.length - 1) {
+			statusIndex++;
+		} else {
+			statusIndex = 0;
+		}
+
+		if (statusIndex === 1) status[1].game.name = `${Math.random()} servers`;
+		client.user.setPresence(status[statusIndex]);
+	}, 5000);
 });
 
 client.on('guildCreate', guild => {
@@ -85,9 +116,9 @@ client.on('message', async message => {
 		guildPrefix = prefix;
 
 	if (message.guild) {
-		foundGuild = await Guild.findOne({ guildID: message.guild.id });
-		guildPrefix = foundGuild.prefix;
-		client.foundGuild = foundGuild;
+		// foundGuild = await Guild.findOne({ guildID: message.guild.id });
+		client.foundGuild = await Guild.findOne({ guildID: message.guild.id });
+		guildPrefix = client.foundGuild.prefix;
 	}
 
 	if (message.author.bot) return;
