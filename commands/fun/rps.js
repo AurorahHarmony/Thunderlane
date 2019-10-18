@@ -6,7 +6,7 @@ const chooseArr = ['🗿', '📰', '✂'];
 module.exports = {
 	name: 'rps',
 	category: 'fun',
-	description: 'Rock Paper Scissors game. React to one of the emojis to play the game.',
+	description: 'Rock Paper Scissors game. React to one of the emojis to play.',
 	usage: 'rps',
 	run: async (client, message, args) => {
 		const embed = new RichEmbed()
@@ -18,7 +18,7 @@ module.exports = {
 
 		const m = await message.channel.send(embed);
 		// Wait for a reaction to be added
-		const reacted = await promptMessage(m, message.author, 30, chooseArr);
+		const reacted = await promptMessage(m, message.author, 10, chooseArr);
 
 		// Get a random emoji from the array
 		const botChoice = chooseArr[Math.floor(Math.random() * chooseArr.length)];
@@ -28,17 +28,20 @@ module.exports = {
 		// Clear the reactions
 		await m.clearReactions();
 
-		embed.setDescription('').addField(result, `${reacted || Nothing} vs ${botChoice}`);
+		embed
+			.setDescription('')
+			.setTitle('')
+			.addField(result, `${reacted || 'Nothing'} vs ${botChoice}`);
 
 		m.edit(embed);
 
 		function getResult(me, clientChosen) {
 			if ((me === '🗿' && clientChosen === '✂') || (me === '📰' && clientChosen === '🗿') || (me === '✂' && clientChosen === '📰')) {
-				return 'You won!';
+				return `${message.member.displayName} Won!`;
 			} else if (me === clientChosen) {
 				return "It's a tie!";
 			} else {
-				return 'You lost!';
+				return `${message.member.displayName} lost!`;
 			}
 		}
 	}
