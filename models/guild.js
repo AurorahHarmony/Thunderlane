@@ -7,23 +7,23 @@ const guildSchema = new mongoose.Schema({
 	prefix: String,
 	logChannels: {
 		reports: {
-			enabled: Boolean,
+			enabled: { type: Boolean, default: false },
 			channel: String
 		},
 		modLog: {
-			enabled: Boolean,
+			enabled: { type: Boolean, default: false },
 			channel: String
 		},
 		joinLog: {
-			enabled: Boolean,
+			enabled: { type: Boolean, default: false },
 			channel: String
 		},
 		leaveLog: {
-			enabled: Boolean,
+			enabled: { type: Boolean, default: false },
 			channel: String
 		},
 		wordWhitelist: {
-			enabled: Boolean,
+			enabled: { type: Boolean, default: false },
 			channel: String,
 			ignoredMembers: Array
 		}
