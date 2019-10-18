@@ -54,7 +54,7 @@ module.exports = {
 				return message.channel.send(embed);
 			}
 
-			if (args[0] === 'disable' || 'disabled') {
+			if (args[0] === 'disable' || args[0] === 'disabled') {
 				client.foundGuild.logChannels.reports.enabled = false;
 				return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild reports channel has been disabled`)));
 			}
