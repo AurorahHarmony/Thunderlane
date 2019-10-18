@@ -17,7 +17,8 @@ module.exports = {
 
 		if (!args[1]) return message.channel.send('Please provide a reason for the report').then(m => m.delete(client.config.liveTime));
 
-		const channel = message.guild.channels.find(channel => channel.name === 'reports');
+		let channel;
+		if (client.foundGuild.logChannels.reports.enabled) channel = client.foundGuild.logChannels.reports.channel;
 
 		if (!channel) return message.channel.send('I could not find the log channel').then(m => m.delete(client.config.liveTime));
 
@@ -30,6 +31,8 @@ module.exports = {
       **Reported In:** ${message.channel}
       **Reason:** ${args.slice(1).join(' ')}`);
 
-		return channel.send(embed);
+		client.channels.get(channel).send(embed);
+		message.author.send(`You have reported a member in ${message.guild.name} (${message.guild.id})`);
+		return message.author.send(embed);
 	}
 };
