@@ -77,6 +77,17 @@ client.on('ready', () => {
 	client.user.setPresence(status[0]);
 
 	let statusIndex = 0;
+	let inServers = 0;
+
+	Guild.countDocuments({}, (err, count) => {
+		inServers = count;
+	});
+
+	setInterval(() => {
+		Guild.estimatedDocumentCount({}, (err, count) => {
+			inServers = count;
+		});
+	}, 60000);
 
 	setInterval(() => {
 		if (statusIndex < status.length - 1) {
@@ -85,7 +96,7 @@ client.on('ready', () => {
 			statusIndex = 0;
 		}
 
-		if (statusIndex === 1) status[1].game.name = `3 servers`;
+		if (statusIndex === 1) status[1].game.name = `${inServers} servers`;
 		client.user.setPresence(status[statusIndex]);
 	}, 5000);
 });
