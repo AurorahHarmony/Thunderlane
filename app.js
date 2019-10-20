@@ -30,6 +30,7 @@ db.on('disconnected', function() {
 });
 
 const Guild = require('./models/guild');
+const User = require('./models/user');
 
 const { Client, RichEmbed, Collection } = require('discord.js');
 const client = new Client({
@@ -123,8 +124,7 @@ client.on('guildUpdate', async (oldGuild, newGuild) => {
 
 client.on('message', async message => {
 	const prefix = '++';
-	let foundGuild,
-		guildPrefix = prefix;
+	let guildPrefix = prefix;
 
 	if (message.guild) {
 		// foundGuild = await Guild.findOne({ guildID: message.guild.id });
@@ -133,6 +133,9 @@ client.on('message', async message => {
 	}
 
 	if (message.author.bot) return;
+
+	client.foundUser = await User.findOrCreate({ userId: message.member.id });
+
 	console.log(`${message.author.tag} said: ${message.content}`);
 	// if (!message.guild) return;
 	if (!message.content.startsWith(prefix) && !message.content.startsWith(guildPrefix)) return;
@@ -162,7 +165,7 @@ client.on('message', async message => {
 		return message.reply("I can't execute that command inside DMs!");
 	}
 
-	if (command) command.run(client, message, args, foundGuild);
+	if (command) command.run(client, message, args);
 });
 
 client.login(process.env.TOKEN);
