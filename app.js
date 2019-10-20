@@ -134,7 +134,7 @@ client.on('message', async message => {
 
 	if (message.author.bot) return;
 
-	client.foundUser = await User.findOrCreate({ userId: message.member.id });
+	client.foundUser = await User.findOrCreate({ userID: message.member.id }, { xp: '' });
 
 	console.log(`${message.author.tag} said: ${message.content}`);
 	// if (!message.guild) return;
