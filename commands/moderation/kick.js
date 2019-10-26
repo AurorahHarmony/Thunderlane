@@ -8,7 +8,28 @@ module.exports = {
 	description: 'Kicks the member',
 	usage: '<id | mention>',
 	run: async (client, message, args) => {
-		const logChannel = message.guild.channels.find(c => c.name === 'logs') || message.channel;
+		// No author permissions
+		if (!message.member.hasPermission('KICK_MEMBERS')) {
+			return message.reply('❌ You do not have permissions to kick members. Please contact a staff member').then(m => m.delete(client.config.liveTime));
+		}
+
+		// No bot permissions
+		if (!message.guild.me.hasPermission('KICK_MEMBERS')) {
+			return message.reply('❌ I do not have permissions to kick members. Please contact a staff member').then(m => m.delete(client.config.liveTime));
+		}
+
+		let logChannel;
+
+		if (client.foundGuild.logChannels.modLog) logChannel = client.foundGuild.logChannels.modLog;
+
+		if (!logChannel)
+			return message.channel.send(
+				new RichEmbed()
+					.setColor(client.config.color.error)
+					.setTitle('Kick a User')
+					.setDescription(stripIndents`Kicking a user is disabled in ${message.guild.name} (${message.guild.id}). Please contact an Administrator to setup a mod log channel.`)
+					.then(m => m.delete(client.config.liveTime))
+			);
 
 		if (message.deletable) message.delete();
 
@@ -20,16 +41,6 @@ module.exports = {
 		// No reason
 		if (!args[1]) {
 			return message.reply('Please provide a reason to kick.').then(m => m.delete(client.config.liveTime));
-		}
-
-		// No author permissions
-		if (!message.member.hasPermission('KICK_MEMBERS')) {
-			return message.reply('❌ You do not have permissions to kick members. Please contact a staff member').then(m => m.delete(client.config.liveTime));
-		}
-
-		// No bot permissions
-		if (!message.guild.me.hasPermission('KICK_MEMBERS')) {
-			return message.reply('❌ I do not have permissions to kick members. Please contact a staff member').then(m => m.delete(client.config.liveTime));
 		}
 
 		const toKick = message.mentions.members.first() || message.guild.members.get(args[0]);
@@ -59,7 +70,7 @@ module.exports = {
 
 		const promptEmbed = new RichEmbed()
 			.setColor(client.config.color.warning)
-			.setAuthor(`This verification will automatically cancel in 30s`)
+			.setAuthor(`This verification will automatically expire in 30s`)
 			.setDescription(`Are you sure you want to **Kick**: ${toKick}?`);
 
 		// Send the message
@@ -75,7 +86,7 @@ module.exports = {
 					if (err) return message.channel.send(`Kick Failed: ${err}`);
 				});
 
-				logChannel.send(embed);
+				client.channels.get(logChannel).send(embed);
 			} else if (emoji === '❌') {
 				msg.delete();
 
