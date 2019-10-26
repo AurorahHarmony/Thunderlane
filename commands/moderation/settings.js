@@ -43,7 +43,7 @@ module.exports = {
 		}
 
 		//Set Report Channel
-		if (args[0] === 'reports') {
+		if (args[0] === 'reports' || args[0] === 'report') {
 			args.shift();
 
 			if (args.length === 0) {
@@ -63,6 +63,29 @@ module.exports = {
 			client.foundGuild.logChannels.reports.enabled = true;
 
 			return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild reports channel has been set to <#${client.foundGuild.logChannels.reports.channel}>`)));
+		}
+
+		//Set Mod log channel
+		if (args[0] === 'modlog') {
+			args.shift();
+
+			if (args.length === 0) {
+				let value = 'not set';
+				if (client.foundGuild.logChannels.modLog.enabled === true) value = `<#${client.foundGuild.logChannels.modLog.channel}>`;
+				embed.setDescription(`The Guild's mod log channel is ${value}`);
+
+				return message.channel.send(embed);
+			}
+
+			if (args[0] === 'disable' || args[0] === 'disabled') {
+				client.foundGuild.logChannels.modLog.enabled = false;
+				return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild mod log channel has been disabled`)));
+			}
+
+			client.foundGuild.logChannels.modLog.channel = getChannel(message, args.join(' '));
+			client.foundGuild.logChannels.modLog.enabled = true;
+
+			client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The mod log channel has been set to <#${client.foundGuild.logChannels.modLog.channel}>`)));
 		}
 	}
 };
