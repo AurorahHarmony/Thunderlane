@@ -18,7 +18,7 @@ module.exports = {
 		if (!args[1]) return message.channel.send('Please provide a reason for the report').then(m => m.delete(client.config.liveTime));
 
 		let channel;
-		if (client.foundGuild.logChannels.reports.enabled) channel = client.foundGuild.logChannels.reports.channel;
+		if (client.foundGuild.logChannels.reports) channel = client.foundGuild.logChannels.reports;
 
 		if (!channel)
 			return message.author.send(
