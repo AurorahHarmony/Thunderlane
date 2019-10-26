@@ -28,7 +28,6 @@ module.exports = {
 					.setColor(client.config.color.error)
 					.setTitle('Kick a User')
 					.setDescription(stripIndents`Kicking a user is disabled in ${message.guild.name} (${message.guild.id}). Please contact an Administrator to setup a mod log channel.`)
-					.then(m => m.delete(client.config.liveTime))
 			);
 
 		if (message.deletable) message.delete();
