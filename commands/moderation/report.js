@@ -20,7 +20,15 @@ module.exports = {
 		let channel;
 		if (client.foundGuild.logChannels.reports.enabled) channel = client.foundGuild.logChannels.reports.channel;
 
-		if (!channel) return message.channel.send('I could not find the log channel').then(m => m.delete(client.config.liveTime));
+		if (!channel)
+			return message.author.send(
+				new RichEmbed().setColor(client.config.color.error).setTitle('Report a User').setDescription(stripIndents`Reporting a user is disabled in ${message.guild.name} (${message.guild.id}). Please contact an Administrator directly.
+				
+					**Member:** ${rMember} (${rMember.id})
+      **Reported By:** ${message.member} (${message.member.id})
+      **Reported In:** ${message.channel}
+      **Reason:** ${args.slice(1).join(' ')}`)
+			);
 
 		const embed = new RichEmbed()
 			.setColor(client.config.color.error)
