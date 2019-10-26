@@ -42,7 +42,7 @@ module.exports = {
 
 		if (autoDelete) {
 			setTimeout(() => {
-				message.delete();
+				if (message.deletable) message.delete();
 			}, time + 100);
 		}
 
