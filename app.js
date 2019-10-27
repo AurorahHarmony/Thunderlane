@@ -133,8 +133,9 @@ client.on('message', async message => {
 	}
 
 	if (message.author.bot) return;
+	console.log(message.author.id);
 
-	client.foundUser = await User.findOrCreate({ userID: message.member.id }, { xp: '' });
+	client.foundUser = await User.findOrCreate({ userID: message.author.id }, { xp: '' });
 
 	console.log(`${message.author.tag} said: ${message.content}`);
 	// if (!message.guild) return;
@@ -161,11 +162,12 @@ client.on('message', async message => {
 	let command = client.commands.get(cmd);
 	if (!command) command = client.commands.get(client.aliases.get(cmd));
 
-	if (!command.supportsDM && message.channel.type !== 'text') {
-		return message.reply("I can't execute that command inside DMs!");
+	if (command) {
+		if (!command.supportsDM && message.channel.type !== 'text') {
+			return message.reply("I can't execute that command inside DMs!");
+		}
+		command.run(client, message, args);
 	}
-
-	if (command) command.run(client, message, args);
 });
 
 client.login(process.env.TOKEN);
