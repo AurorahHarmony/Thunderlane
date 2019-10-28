@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
+const softBanSchema = new mongoose.Schema({
+	userID: String,
+	unbanTime: Number,
+	bannedTime: Number
+});
+
 const guildSchema = new mongoose.Schema({
 	guildID: { type: String, required: true },
 	guildName: String,
@@ -14,7 +20,8 @@ const guildSchema = new mongoose.Schema({
 			channel: String,
 			ignoredMembers: Array
 		}
-	}
+	},
+	softBans: [softBanSchema]
 });
 
 guildSchema.plugin(findOrCreate);
