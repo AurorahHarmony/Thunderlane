@@ -47,6 +47,7 @@ module.exports = {
 		if (!toBan.bannable) {
 			return message.reply("I can't soft ban that person due to role hierarchy").then(m => m.delete(client.config.liveTime));
 		}
+
 		await message.channel.send(`How long would you like to softban ${toBan} for?`).then(async msg => {
 			const response = await furtherInputMessage(msg, message.author, 30);
 			const currentTime = getUnixTime();
@@ -69,6 +70,18 @@ module.exports = {
 						**Ban Length:** ${secondsToString(secondsToBan)}
 						**Ends On:** ${unbanDate.getUTCDate()}/${unbanDate.getUTCMonth() + 1}/${unbanDate.getUTCFullYear()} at ${unbanHourString}:${unbanMinuteString} UTC`);
 
+			let toSoftBan = {
+				userID: toBan,
+				unbanTime: unbanTime,
+				bannedTime: currentTime
+			};
+
+			let softBanIndex = await client.foundGuild.softBans.findIndex(current => current.userID == toSoftBan.userID);
+
+			if (softBanIndex !== -1) {
+				promptEmbed.setDescription(promptEmbed.description + `\n*\`softban will update old softban made ${secondsToString(currentTime - client.foundGuild.softBans[softBanIndex].bannedTime)}\` ago*`);
+			}
+
 			// Send the message
 			await message.channel.send(promptEmbed).then(async msg => {
 				// Await the reactions and the reactioncollector
@@ -77,16 +90,6 @@ module.exports = {
 				if (emoji === '✅') {
 					msg.delete();
 
-					let toSoftBan = {
-						userID: toBan,
-						unbanTime: unbanTime,
-						bannedTime: currentTime
-					};
-
-					let softBanIndex = await client.foundGuild.softBans.findIndex(current => current.userID == toSoftBan.userID);
-
-					console.log(softBanIndex);
-
 					if (softBanIndex === -1) {
 						client.foundGuild.softBans.push(toSoftBan);
 					} else {
@@ -94,11 +97,13 @@ module.exports = {
 						client.foundGuild.softBans[softBanIndex] = toSoftBan;
 					}
 
-					client.foundGuild.save();
-
-					// toBan.ban(args.slice(1).join(' ')).catch(err => {
-					// 	if (err) return message.channel.send(`Ban Failed: ${err}`);
-					// });
+					try {
+						client.foundGuild.save();
+						toBan.ban(args.slice(1).join(' '));
+					} catch (err) {
+						if (err) return message.channel.send(`Ban Failed: ${err}`);
+						return;
+					}
 					client.channels.get(logChannel).send(notificationEmbed);
 				} else if (emoji === '❌') {
 					msg.delete();
