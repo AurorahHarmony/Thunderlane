@@ -133,7 +133,6 @@ client.on('message', async message => {
 	}
 
 	if (message.author.bot) return;
-	console.log(message.author.id);
 
 	client.foundUser = await User.findOrCreate({ userID: message.author.id }, { xp: '' });
 
