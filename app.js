@@ -100,6 +100,32 @@ client.on('ready', () => {
 		if (statusIndex === 1) status[1].game.name = `${inServers} servers`;
 		client.user.setPresence(status[statusIndex]);
 	}, 5000);
+
+	const { getUnixTime, secondsToString } = require('./functions.js');
+	const { stripIndents } = require('common-tags');
+
+	setInterval(async () => {
+		let currentTimeStamp = getUnixTime();
+		let toUnSoftBan = await Guild.find({ softBans: { $elemMatch: { unbanTime: { $lt: currentTimeStamp } } } });
+		let notificationEmbed = new RichEmbed().setColor(client.config.color.success).setTimestamp();
+
+		toUnSoftBan.forEach(server => {
+			server.softBans.forEach((sb, index) => {
+				if (sb.unbanTime > currentTimeStamp) return;
+				console.log(`${sb.userID} will be unbanned ${sb.unbanTime} and time is ${currentTimeStamp}`);
+
+				client.fetchUser(sb.userID.replace(/[^0-9]/g, '')).then(usr => {
+					client.guilds.get(server.guildID).unban(usr.id);
+					notificationEmbed.setThumbnail(usr.displayAvatarURL).setDescription(stripIndents`__A Member was auto-unbanned__
+					**SoftBanned Member:** ${sb.userID} (${usr.id})
+					**Banned For:** ${secondsToString(sb.unbanTime - sb.bannedTime)}`);
+					client.channels.get(server.logChannels.modLog).send(notificationEmbed);
+					server.softBans.splice(index, 1);
+					server.save();
+				});
+			});
+		});
+	}, 5000);
 });
 
 client.on('guildCreate', guild => {
