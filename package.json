@@ -1,27 +1,27 @@
 {
-  "name": "thunderlane",
-  "version": "1.0.0",
-  "description": "Thunderlane",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AurorahHarmony/Thunderlane.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AurorahHarmony/Thunderlane/issues"
-  },
-  "homepage": "https://github.com/AurorahHarmony/Thunderlane#readme",
-  "dependencies": {
-    "ascii-table": "0.0.9",
-    "common-tags": "^1.8.0",
-    "discord.js": "^11.5.1",
-    "dotenv": "^8.1.0",
-    "mongoose": "^5.7.4",
-    "mongoose-findorcreate": "^3.0.0"
-  }
+	"name": "thunderlane",
+	"version": "1.0.0",
+	"description": "Thunderlane",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AurorahHarmony/Thunderlane.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/AurorahHarmony/Thunderlane/issues"
+	},
+	"homepage": "https://github.com/AurorahHarmony/Thunderlane#readme",
+	"dependencies": {
+		"ascii-table": "0.0.9",
+		"common-tags": "^1.8.0",
+		"discord.js": "^11.5.1",
+		"dotenv": "^8.2.0",
+		"mongoose": "^5.7.5",
+		"mongoose-findorcreate": "^3.0.0"
+	}
 }
