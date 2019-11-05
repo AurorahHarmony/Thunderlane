@@ -148,6 +148,18 @@ client.on('guildUpdate', async (oldGuild, newGuild) => {
 	);
 });
 
+client.on('guildMemberAdd', async msg => {
+	console.log(msg.guild.id);
+
+	client.foundGuild = await Guild.findOne({ guildID: msg.guild.id });
+
+	console.log(typeof client.foundGuild.logChannels.welcomeMsg.channel);
+
+	if (typeof client.foundGuild.logChannels.welcomeMsg.channel === 'undefined') return;
+
+	msg.guild.channels.get(client.foundGuild.logChannels.welcomeMsg.channel).send(client.foundGuild.logChannels.welcomeMsg.message.replace(/#tag/g, `<@${msg.user.id}>`));
+});
+
 client.on('message', async message => {
 	const prefix = '++';
 	let guildPrefix = prefix;

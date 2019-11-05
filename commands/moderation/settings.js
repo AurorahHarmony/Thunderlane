@@ -85,5 +85,51 @@ module.exports = {
 
 			client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The mod log channel has been set to <#${client.foundGuild.logChannels.modLog}>`)));
 		}
+
+		//Set Join message channel and message
+		if (args[0] === 'welcome') {
+			args.shift();
+
+			if (args[0] === 'disable' || args[0] === 'disabled') {
+				client.foundGuild.logChannels.welcomeMsg.channel = undefined;
+				return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild welcome message has been disabled`)));
+			}
+
+			if (args[0] === 'channel') {
+				args.shift();
+
+				if (args.length === 0) {
+					let value = 'not set';
+					console.log(client.foundGuild.logChannels);
+
+					if (client.foundGuild.logChannels.welcomeMsg.channel) value = `<#${client.foundGuild.logChannels.welcomeMsg.channel}>`;
+					embed.setDescription(`The Guild's welcome message channel is ${value}`);
+
+					return message.channel.send(embed);
+				}
+
+				client.foundGuild.logChannels.welcomeMsg.channel = getChannel(message, args.join(' '));
+
+				client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The welcome channel has been set to <#${client.foundGuild.logChannels.welcomeMsg.channel}>`)));
+				return;
+			}
+
+			if (args[0] === 'message' || args[0] === 'msg') {
+				if (!client.foundGuild.logChannels.welcomeMsg.channel) {
+					message.channel.send(embed.setDescription('You need to set a welcome message channel before you can set up a welcome message'));
+				}
+
+				args.shift();
+
+				client.foundGuild.logChannels.welcomeMsg.message = args.join(' ');
+				client.foundGuild.save();
+
+				const newMsg = client.foundGuild.logChannels.welcomeMsg.message.replace(/#tag/g, `<@${message.member.user.id}>`);
+				message.channel.send(embed.setDescription(`The Guild's welcome message has been set to: ${newMsg}`).setColor(client.config.color.success));
+				return;
+			}
+
+			message.channel.send(embed.setDescription('Invalid Option').setColor(client.config.color.error));
+		}
 	}
 };

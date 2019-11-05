@@ -16,6 +16,10 @@ const guildSchema = new mongoose.Schema({
 		modLog: String,
 		joinLog: String,
 		leaveLog: String,
+		welcomeMsg: {
+			channel: String,
+			message: String
+		},
 		wordWhitelist: {
 			channel: String,
 			ignoredMembers: Array
