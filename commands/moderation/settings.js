@@ -68,8 +68,6 @@ module.exports = {
 		if (args[0] === 'modlog') {
 			args.shift();
 
-			console.log(client.foundGuild.logChannels.modLog);
-
 			if (args.length === 0) {
 				let value = 'not set';
 				if (client.foundGuild.logChannels.modLog) value = `<#${client.foundGuild.logChannels.modLog}>`;
