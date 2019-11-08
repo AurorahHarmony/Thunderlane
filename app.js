@@ -167,7 +167,6 @@ client.on('message', async message => {
 	client.foundGuild = undefined;
 
 	if (message.guild) {
-		// foundGuild = await Guild.findOne({ guildID: message.guild.id });
 		client.foundGuild = await Guild.findOne({ guildID: message.guild.id });
 		guildPrefix = client.foundGuild.prefix;
 	}
@@ -177,7 +176,6 @@ client.on('message', async message => {
 	client.foundUser = await User.findOrCreate({ userID: message.author.id }, { xp: '' });
 
 	console.log(`${message.author.tag} said: ${message.content}`);
-	// if (!message.guild) return;
 	if (!message.content.startsWith(prefix) && !message.content.startsWith(guildPrefix)) return;
 	if (!message.member && message.guild) message.member = await message.guild.fetchMember(message);
 
