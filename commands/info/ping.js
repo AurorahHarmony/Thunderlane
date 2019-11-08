@@ -2,6 +2,7 @@ const { RichEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'ping',
+	cooldown: 5,
 	category: 'info',
 	description: 'returns latency and API ping',
 	supportsDM: true,

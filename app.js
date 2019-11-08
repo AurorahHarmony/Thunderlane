@@ -43,6 +43,7 @@ client.commands = new Collection();
 client.aliases = new Collection();
 client.config = require('./config.json');
 client.categories = fs.readdirSync('./commands/');
+client.cooldowns = new Collection();
 
 ['command'].forEach(handler => {
 	require(`./handler/${handler}`)(client);
@@ -200,9 +201,33 @@ client.on('message', async message => {
 	if (!command) command = client.commands.get(client.aliases.get(cmd));
 
 	if (command) {
+		if (!client.cooldowns.has(command.name)) {
+			client.cooldowns.set(command.name, new Collection());
+		}
+
+		const now = Date.now();
+		const timestamps = client.cooldowns.get(command.name);
+		const cooldownAmount = (command.cooldown || 3) * 1000;
+
+		console.log(timestamps);
+		console.log(now);
+
+		if (timestamps.has(message.author.id)) {
+			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+			if (now < expirationTime) {
+				const timeLeft = (expirationTime - now) / 1000;
+				return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`).then(m => m.delete(client.config.liveTime));
+			}
+		}
+
+		timestamps.set(message.author.id, now);
+		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
 		if (!command.supportsDM && message.channel.type !== 'text') {
 			return message.reply("I can't execute that command inside DMs!");
 		}
+
 		command.run(client, message, args);
 	}
 });
