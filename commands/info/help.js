@@ -29,8 +29,8 @@ function getAll(client, message) {
 	});
 
 	let serverPrefix = () => {
-		if (client.foundGuild !== undefined) return client.foundGuild.prefix;
-		return '++';
+		if (client.foundGuild === undefined) return '++';
+		return client.foundGuild.prefix;
 	};
 
 	embed.setFooter(`The prefix for this server is ${serverPrefix()}`);

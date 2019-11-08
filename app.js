@@ -164,6 +164,7 @@ client.on('guildMemberAdd', async msg => {
 client.on('message', async message => {
 	const prefix = '++';
 	let guildPrefix = prefix;
+	client.foundGuild = undefined;
 
 	if (message.guild) {
 		// foundGuild = await Guild.findOne({ guildID: message.guild.id });
