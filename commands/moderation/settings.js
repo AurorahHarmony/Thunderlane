@@ -7,6 +7,8 @@ module.exports = {
 	category: 'moderation',
 	description: 'Allows you to set various server specific bot settings',
 	run: async (client, message, args) => {
+		args[0] = args[0].toLowerCase();
+
 		if (!message.member.hasPermission('ADMINISTRATOR'))
 			return message.channel
 				.send(
@@ -130,6 +132,50 @@ module.exports = {
 			}
 
 			message.channel.send(embed.setDescription('Invalid Option').setColor(client.config.color.error));
+		}
+
+		//Set Join Log Channel
+		if (args[0] === 'joinlog') {
+			args.shift();
+
+			if (args.length === 0) {
+				let value = 'not set';
+				if (client.foundGuild.logChannels.joinLog) value = `<#${client.foundGuild.logChannels.joinLog}>`;
+				embed.setDescription(`The Guild's join log channel is ${value}`);
+
+				return message.channel.send(embed);
+			}
+
+			if (args[0] === 'disable' || args[0] === 'disabled') {
+				client.foundGuild.logChannels.joinLog = undefined;
+				return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild join log channel has been disabled`)));
+			}
+
+			client.foundGuild.logChannels.joinLog = getChannel(message, args.join(' '));
+
+			client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The join log channel has been set to <#${client.foundGuild.logChannels.joinLog}>`)));
+		}
+
+		//Set Leave Log Channel
+		if (args[0] === 'leavelog') {
+			args.shift();
+
+			if (args.length === 0) {
+				let value = 'not set';
+				if (client.foundGuild.logChannels.leaveLog) value = `<#${client.foundGuild.logChannels.leaveLog}>`;
+				embed.setDescription(`The Guild's join log channel is ${value}`);
+
+				return message.channel.send(embed);
+			}
+
+			if (args[0] === 'disable' || args[0] === 'disabled') {
+				client.foundGuild.logChannels.leaveLog = undefined;
+				return client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The Guild leave log channel has been disabled`)));
+			}
+
+			client.foundGuild.logChannels.leaveLog = getChannel(message, args.join(' '));
+
+			client.foundGuild.save().then(message.channel.send(embed.setColor(client.config.color.success).setDescription(`The leave log channel has been set to <#${client.foundGuild.logChannels.leaveLog}>`)));
 		}
 	}
 };
