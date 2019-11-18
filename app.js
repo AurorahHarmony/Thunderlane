@@ -150,15 +150,35 @@ client.on('guildUpdate', async (oldGuild, newGuild) => {
 });
 
 client.on('guildMemberAdd', async msg => {
-	console.log(msg.guild.id);
-
 	client.foundGuild = await Guild.findOne({ guildID: msg.guild.id });
+
+	let embed = new RichEmbed()
+		.setColor(client.config.color.info)
+		.setThumbnail(msg.user.displayAvatarURL)
+		.setTimestamp();
+
+	if (client.foundGuild.logChannels.joinLog !== 'undefined' && client.foundGuild.logChannels.joinLog !== undefined) {
+		msg.guild.channels.get(client.foundGuild.logChannels.joinLog).send(embed.setTitle(`:arrow_right: ${msg.user.tag} has joined the server`).setDescription(`<@${msg.user.id}> (${msg.user.id})`));
+	}
 
 	console.log(typeof client.foundGuild.logChannels.welcomeMsg.channel);
 
 	if (typeof client.foundGuild.logChannels.welcomeMsg.channel === 'undefined') return;
 
 	msg.guild.channels.get(client.foundGuild.logChannels.welcomeMsg.channel).send(client.foundGuild.logChannels.welcomeMsg.message.replace(/#tag/g, `<@${msg.user.id}>`));
+});
+
+client.on('guildMemberRemove', async msg => {
+	client.foundGuild = await Guild.findOne({ guildID: msg.guild.id });
+
+	let embed = new RichEmbed()
+		.setColor(client.config.color.info)
+		.setThumbnail(msg.user.displayAvatarURL)
+		.setTimestamp();
+
+	if (client.foundGuild.logChannels.leaveLog !== 'undefined' && client.foundGuild.logChannels.leaveLog !== undefined) {
+		msg.guild.channels.get(client.foundGuild.logChannels.leaveLog).send(embed.setTitle(`:arrow_left: ${msg.user.tag} has left the server`).setDescription(`<@${msg.user.id}> (${msg.user.id})`));
+	}
 });
 
 client.on('message', async message => {
